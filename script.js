@@ -1,4 +1,22 @@
-import 'https://kim-lan.github.io/github-pages-local-storage/index.js'
+function clearLocalStorage() {
+  // Source - https://stackoverflow.com/a/59081878
+  // Posted by tbenst, modified by community. See post 'Timeline' for change history
+  // Retrieved 2026-03-31, License - CC BY-SA 4.0
+
+  Object.keys(localStorage)
+    .filter(x =>
+      x.startsWith(location.pathname))
+    .forEach(x => 
+      localStorage.removeItem(x));
+}
+
+function localStorageSetItem(key, value) {
+  localStorage.setItem(`${location.pathname}:${key}`, value);
+}
+
+function localStorageGetItem(key) {
+  return localStorage.getItem(`${location.pathname}:${key}`);
+}
 
 // Globals
 const M = 25; // board size
@@ -160,7 +178,7 @@ function wireButton(button) {
       selected = null;
     }
     if (!didMatch) {
-     saveState();
+      saveState();
     }
     if (score >= M * (M - 1)) {
       window.alert("You win!!");
@@ -406,7 +424,7 @@ function shuffleBoard() {
 }
 
 function resetGame() {
-  localStorage.clear();
+  clearLocalStorage();
   score = 0;
   mistakes = 0;
   selected = null;
@@ -537,11 +555,11 @@ function shuffleArray(array) {
 }
 
 function saveState() {
-  localStorage.clear();
+  clearLocalStorage();
 
-  localStorage.setItem("hasState", "1");
-  localStorage.setItem("score", score + "");
-  localStorage.setItem("mistakes", mistakes + "");
+  localStorageSetItem("hasState", "1");
+  localStorageSetItem("score", score + "");
+  localStorageSetItem("mistakes", mistakes + "");
   const panelButtons = Array.from(
     document.querySelectorAll("#priority-lane button.bigbut"),
   );
@@ -551,7 +569,7 @@ function saveState() {
       category: button.category,
       cluster: button.cluster,
     }));
-  localStorage.setItem("panelClusters", JSON.stringify(panelClusters));
+  localStorageSetItem("panelClusters", JSON.stringify(panelClusters));
 
   const t = document.getElementById("the_table");
   for (let i = 0; i < t.rows.length; i++) {
@@ -562,10 +580,10 @@ function saveState() {
       if (!button || !button.category || !button.cluster) {
         continue;
       }
-      localStorage.setItem(`${i}_${j}_category`, button.category);
-      localStorage.setItem(`${i}_${j}_cluster`, JSON.stringify(button.cluster));
-      localStorage.setItem(`${i}_${j}_innerHTML`, button.innerHTML);
-      localStorage.setItem(`${i}_${j}_title`, button.title);
+      localStorageSetItem(`${i}_${j}_category`, button.category);
+      localStorageSetItem(`${i}_${j}_cluster`, JSON.stringify(button.cluster));
+      localStorageSetItem(`${i}_${j}_innerHTML`, button.innerHTML);
+      localStorageSetItem(`${i}_${j}_title`, button.title);
     }
   }
 }
@@ -770,24 +788,24 @@ function setUpBoard() {
 }
 
 function loadState() {
-  const hasState = localStorage.getItem("hasState");
+  const hasState = localStorageGetItem("hasState");
   if (!hasState) {
     putWordsInBoard();
     return;
   }
-  score = Number(localStorage.getItem("score") || 0);
+  score = Number(localStorageGetItem("score") || 0);
   document.getElementById("score").textContent = score;
 
-  mistakes = Number(localStorage.getItem("mistakes") || 0);
+  mistakes = Number(localStorageGetItem("mistakes") || 0);
   document.getElementById("mistakes").textContent = mistakes;
 
-  enableSortPriority = JSON.parse(localStorage.getItem("enableSortPriority"));
+  enableSortPriority = JSON.parse(localStorageGetItem("enableSortPriority"));
   const toggleSortBtn = document.getElementById("toggle-sort-btn");
   toggleSortBtn.textContent = enableSortPriority ? "disable sort" : "enable sort";
 
   const matchedList = document.getElementById("priority-lane");
   matchedList.innerHTML = "";
-  const storedPanel = localStorage.getItem("panelClusters");
+  const storedPanel = localStorageGetItem("panelClusters");
   if (storedPanel) {
     try {
       const parsed = JSON.parse(storedPanel) || [];
@@ -820,12 +838,12 @@ function loadState() {
     for (let j = 0, col; (col = row.cells[j]); j++) {
       const button = col.firstElementChild;
       
-      const storedCluster = localStorage.getItem(`${i}_${j}_cluster`);
+      const storedCluster = localStorageGetItem(`${i}_${j}_cluster`);
       if (storedCluster == null) {
         cells_to_remove.push(col);
         continue;
       }
-      button.category = localStorage.getItem(`${i}_${j}_category`);
+      button.category = localStorageGetItem(`${i}_${j}_category`);
       button.cluster = JSON.parse(storedCluster);
       if (!button.category || !Array.isArray(button.cluster)) {
         cells_to_remove.push(col);
@@ -991,7 +1009,7 @@ function selectLastItem(event) {
 const toggleSortBtn = document.getElementById("toggle-sort-btn");
 toggleSortBtn.onclick = () => {
   enableSortPriority = !enableSortPriority;
-  localStorage.setItem("enableSortPriority", JSON.stringify(enableSortPriority));
+  localStorageSetItem("enableSortPriority", JSON.stringify(enableSortPriority));
   if (enableSortPriority) {
     toggleSortBtn.textContent = "disable sort";
     sortPriorityLane();
