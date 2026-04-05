@@ -78,10 +78,16 @@ body {
 
 #status {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: start;
   gap: 12px;
   flex-wrap: wrap;
   font-size: clamp(12px, 1.6vw, 16px);
+}
+
+#stats {
+  display: flex;
+  gap: 16px;
 }
 
 .stat {
@@ -265,7 +271,7 @@ button.bigbut.selected {
   opacity: 0.3;
 }
 
-button.bigbut.hidden {
+.hidden {
   visibility: hidden;
 }
 

@@ -33,6 +33,7 @@ let lastGroup = null;
 let lastItem = null;
 
 let enableSortPriority = false;
+let showMistakes = true;
 
 // Functions
 function clearPinZone() {
@@ -803,6 +804,14 @@ function loadState() {
   const toggleSortBtn = document.getElementById("toggle-sort-btn");
   toggleSortBtn.textContent = enableSortPriority ? "disable sort" : "enable sort";
 
+  showMistakes = JSON.parse(localStorageGetItem("showMistakes"));
+  const toggleMistakesBtn = document.getElementById("toggle-mistakes-btn");
+  const mistakesContainer = document.getElementById("mistakes-container");
+  if (!showMistakes) {
+    toggleMistakesBtn.textContent = "show mistakes";
+    mistakesContainer.classList.add("hidden");
+  }
+
   const matchedList = document.getElementById("priority-lane");
   matchedList.innerHTML = "";
   const storedPanel = localStorageGetItem("panelClusters");
@@ -1015,5 +1024,19 @@ toggleSortBtn.onclick = () => {
     sortPriorityLane();
   } else {
     toggleSortBtn.textContent = "enable sort";
+  }
+}
+
+const toggleMistakesBtn = document.getElementById("toggle-mistakes-btn");
+const mistakesContainer = document.getElementById("mistakes-container");
+toggleMistakesBtn.onclick = () => {
+  showMistakes = !showMistakes;
+  localStorageSetItem("showMistakes", JSON.stringify(showMistakes));
+  if (showMistakes) {
+    toggleMistakesBtn.textContent="hide mistakes";
+    mistakesContainer.classList.remove("hidden");
+  } else {
+    toggleMistakesBtn.textContent="show mistakes";
+    mistakesContainer.classList.add("hidden");
   }
 }

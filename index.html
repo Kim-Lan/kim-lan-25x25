@@ -23,13 +23,18 @@
               <span class="shortcut-key" id="last-group-btn"><span class="keycap">1</span> select last group</span>
               <span class="shortcut-key" id="last-item-btn"><span class="keycap">2</span> select last item</span>
               <span class="shortcut-key" id="toggle-sort-btn">enable sort</span>
+              <span class="shortcut-key" id="toggle-mistakes-btn">hide mistakes</span>
             </div>
           </div>
           <div id="status">
-            <span class="stat">score: <span id="score">0</span></span>
-            <span class="stat">mistakes: <span id="mistakes">0</span></span>
-            <label class="sr-only" for="filter-input">Filter words</label>
-            <input id="filter-input" type="search" placeholder="type / to search" autocomplete="off" />
+            <div id="stats">
+              <span class="stat">score: <span id="score">0</span></span>
+              <span class="stat" id="mistakes-container">mistakes: <span id="mistakes">0</span></span>
+            </div>
+            <div>
+              <label class="sr-only" for="filter-input">Filter words</label>
+              <input id="filter-input" type="search" placeholder="type / to search" autocomplete="off" />
+            </div>
           </div>
         </div>
       </header>
