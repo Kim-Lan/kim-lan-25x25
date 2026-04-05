@@ -134,6 +134,7 @@ body {
   box-shadow: 0 10px 30px var(--shadow);
   overflow: auto;
   max-height: calc(100vh - 175px);
+  min-height: calc(100vh - 175px);
 }
 
 #board-wrapper.shuffle-flash {
