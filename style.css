@@ -293,9 +293,14 @@ button.bigbut.juice-pop {
 .cluster-summary {
   font-weight: 700;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.completed .cluster-summary {
+  overflow: visible;
+  -webkit-line-clamp: unset;
 }
 
 .cluster-count {
